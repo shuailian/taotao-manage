@@ -14,8 +14,25 @@
 		http://www.springframework.org/schema/tx/spring-tx-3.2.xsd
 ">
 
-    <!--1:加载配置文件-->
+    <!--使用spring自带的占位符替换功能-->
+    <bean class="org.springframework.beans.factory.config.PropertyPlaceholderConfigurer">
+        <!--允许JVM进行覆盖-->
+        <property name="systemPropertiesModeName" value="SYSTEM_PROPERTIES_MODE_OVERRIDE"/>
+        <!--忽略没有找到的资源文件-->
+        <property name="ignoreResourceNotFound" value="true"/>
+        <!--配置资源文件-->
+        <property name="locations">
+            <list>
+                <value>classpath:db/db.properties</value>
+                <value>classpath:upload.properties</value>
+            </list>
+        </property>
+    </bean>
+
+    <!--1:加载配置文件
     <context:property-placeholder location="classpath:db/db.properties"/>
+    <context:property-placeholder location="classpath:upload.properties"/>-->
+
     <!--开启包扫描-->
     <context:component-scan base-package="zzw"/>
     <!--配置数据源-->

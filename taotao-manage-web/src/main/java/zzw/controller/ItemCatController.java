@@ -1,7 +1,6 @@
 package zzw.controller;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -25,14 +24,18 @@ public class ItemCatController {
     @RequestMapping(method = RequestMethod.GET)
     public ResponseEntity<List<ItemCat>> queryItemCatList(@RequestParam(defaultValue = "0") Long id) {
         try {
-            List<ItemCat> itemCatList = service.queryItemCatList(id);
+            ItemCat itemCat = new ItemCat();
+            itemCat.setParentId(id);
+            List<ItemCat> itemCatList = service.queryByWhere(itemCat);
             if (itemCatList == null || itemCatList.isEmpty()) {
-                return ResponseEntity.status(HttpStatus.NOT_FOUND).body(null);
+                return ResponseEntity.status(404).body(null);
             }
-            return ResponseEntity.ok(itemCatList);
+            return ResponseEntity.ok(itemCatList);//200
         } catch (Exception e) {
+            System.out.println(e);
             e.printStackTrace();
         }
-        return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(null);
+        return ResponseEntity.status(500).body(null);
     }
+
 }
